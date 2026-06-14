@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+langchain
+langgraph
+langchain-google-genai
+langchain-chroma
+chromadb
+pydantic
+pydantic-settings
+python-multipart
+pypdf
+sentence-transformers
+google-generativeai

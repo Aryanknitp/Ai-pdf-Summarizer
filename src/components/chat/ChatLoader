@@ -1,0 +1,9 @@
+export default function ChatLoader() {
+  return (
+    <div className="flex-1 flex items-center justify-center">
+      <div className="text-slate-400 text-lg">
+        Loading conversation...
+      </div>
+    </div>
+  );
+}

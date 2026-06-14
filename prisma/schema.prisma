@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("mongodb+srv://aryankrbjunitp_db_user:17u05v3fttEsbYRv@cluster0.5ci8avp.mongodb.net/book")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  password  String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Document {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  originalName String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  uploadedBy  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Summary {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  documentId  String
+  content     String
+  createdAt   DateTime @default(now())
+}
+
+model Chat {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  documentId  String
+  question    String
+  answer      String
+  createdAt   DateTime @default(now())
+}
+model Preference {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique
+  theme       String   @default("dark")
+  notifications Boolean @default(true)
+}
+model Activity {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  type        String
+  title       String
+  action      String
+  description String?
+  createdAt   DateTime @default(now())
+}
+model History {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  documentId  String?
+  action      String
+  metadata    String?
+  createdAt   DateTime @default(now())
+}
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  title       String
+  message     String
+  type        String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+model Preference {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @unique
+  theme         String   @default("dark")
+  language      String   @default("en")
+  notifications Boolean  @default(true)
+  aiModel       String?  @default("gemini")
+  summaryLength String?  @default("medium")
+}
