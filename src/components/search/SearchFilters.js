@@ -1,12 +1,7 @@
 "use client";
 
 export default function SearchFilters() {
-  const filters = [
-    "All",
-    "Documents",
-    "Summaries",
-    "Chats",
-  ];
+  const filters = ["All", "Documents", "Summaries", "Chats"];
 
   return (
     <div className="flex gap-2 flex-wrap">
