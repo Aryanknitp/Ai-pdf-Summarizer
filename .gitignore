@@ -35,6 +35,7 @@ yarn-error.log*
 *$py.class
 
 # Environments
+./python-ai/.env
 .env
 .env.local
 .env.development.local
