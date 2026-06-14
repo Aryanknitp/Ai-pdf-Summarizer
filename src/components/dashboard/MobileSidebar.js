@@ -110,13 +110,13 @@ export default function MobileSidebar() {
       icon: Settings,
     },
   ];
-   return (
-  <>
-    {/* Overlay */}
-    {open && (
-      <div
-        onClick={() => setOpen(false)}
-        className="
+  return (
+    <>
+      {/* Overlay */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="
           fixed
           inset-0
           z-40
@@ -124,12 +124,12 @@ export default function MobileSidebar() {
           backdrop-blur-sm
           md:hidden
         "
-      />
-    )}
+        />
+      )}
 
-    {/* Mobile Sidebar */}
-    <aside
-      className={`
+      {/* Mobile Sidebar */}
+      <aside
+        className={`
         fixed
         top-0
         left-0
@@ -146,58 +146,41 @@ export default function MobileSidebar() {
         duration-300
         ease-in-out
         md:hidden
-        ${
-          open
-            ? "translate-x-0"
-            : "-translate-x-full"
-        }
+        ${open ? "translate-x-0" : "-translate-x-full"}
       `}
-    >
-      {/* Header */}
-      <div className="h-16 min-h-16 border-b border-slate-800 flex items-center justify-between px-5">
-        <h2 className="text-2xl font-bold text-blue-500">
-          AI PDF
-        </h2>
+      >
+        {/* Header */}
+        <div className="h-16 min-h-16 border-b border-slate-800 flex items-center justify-between px-5">
+          <h2 className="text-2xl font-bold text-blue-500">AI PDF</h2>
 
-        <button
-          onClick={() =>
-            setOpen(false)
-          }
-          className="p-2 rounded-lg hover:bg-slate-800 transition"
-        >
-          <X size={22} />
-        </button>
-      </div>
+          <button
+            onClick={() => setOpen(false)}
+            className="p-2 rounded-lg hover:bg-slate-800 transition"
+          >
+            <X size={22} />
+          </button>
+        </div>
 
-      {/* Scrollable Navigation */}
-      <nav
-        className="
+        {/* Scrollable Navigation */}
+        <nav
+          className="
           flex-1
           overflow-y-auto
           p-4
           space-y-2
         "
-      >
-        {menus.map((item) => {
-          const Icon =
-            item.icon;
+        >
+          {menus.map((item) => {
+            const Icon = item.icon;
 
-          const active =
-            pathname ===
-            item.href;
+            const active = pathname === item.href;
 
-          return (
-            <Link
-              key={item.href}
-              href={
-                item.href
-              }
-              onClick={() =>
-                setOpen(
-                  false
-                )
-              }
-              className={`
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className={`
                 flex
                 items-center
                 gap-4
@@ -212,38 +195,30 @@ export default function MobileSidebar() {
                     : "text-slate-300 hover:bg-slate-800"
                 }
               `}
-            >
-              <Icon
-                size={20}
-              />
+              >
+                <Icon size={20} />
 
-              <span className="font-medium">
-                {item.name}
-              </span>
-            </Link>
-          );
-        })}
-      </nav>
+                <span className="font-medium">{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-      {/* Fixed Footer */}
-      <div className="border-t border-slate-800 p-4">
-        <div className="bg-slate-800 rounded-xl p-4">
-          <p className="text-sm font-medium">
-            AI PDF Summarizer
-          </p>
+        {/* Fixed Footer */}
+        <div className="border-t border-slate-800 p-4">
+          <div className="bg-slate-800 rounded-xl p-4">
+            <p className="text-sm font-medium">AI PDF Summarizer</p>
 
-          <p className="mt-1 text-xs text-slate-400">
-            Upload • Summarize • Chat
-          </p>
+            <p className="mt-1 text-xs text-slate-400">
+              Upload • Summarize • Chat
+            </p>
 
-          <div className="mt-3 h-px bg-slate-700" />
+            <div className="mt-3 h-px bg-slate-700" />
 
-          <p className="mt-3 text-[11px] text-slate-500">
-            Version 1.0.0
-          </p>
+            <p className="mt-3 text-[11px] text-slate-500">Version 1.0.0</p>
+          </div>
         </div>
-      </div>
-    </aside>
-  </>
-);
+      </aside>
+    </>
+  );
 }

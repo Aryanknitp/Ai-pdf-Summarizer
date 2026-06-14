@@ -26,11 +26,16 @@ import {
 export default function Sidebar() {
   const pathname = usePathname();
 
-  const menus = [
+ const menus = [
     {
       name: "Dashboard",
       href: "/dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      name: "Upload PDF",
+      href: "/dashboard/upload",
+      icon: Upload,
     },
     {
       name: "Activity",
@@ -38,20 +43,29 @@ export default function Sidebar() {
       icon: Activity,
     },
     {
-      name: "Analytics",
-      href: "/dashboard/analytics",
-      icon: BarChart3,
-    },
-    {
       name: "History",
       href: "/dashboard/history",
       icon: History,
     },
-
     {
-      name: "Upload PDF",
-      href: "/dashboard/upload",
-      icon: Upload,
+      name: "Notifications",
+      href: "/dashboard/notifications",
+      icon: Bell,
+    },
+    {
+      name: "Search",
+      href: "/dashboard/search",
+      icon: Search,
+    },
+    {
+      name: "Preferences",
+      href: "/dashboard/preferences",
+      icon: SlidersHorizontal,
+    },
+    {
+      name: "Analytics",
+      href: "/dashboard/analytics",
+      icon: BarChart3,
     },
     {
       name: "Documents",
@@ -59,7 +73,7 @@ export default function Sidebar() {
       icon: Files,
     },
     {
-      name: "Summary",
+      name: "AI Summary",
       href: "/dashboard/summary",
       icon: FileText,
     },
@@ -77,21 +91,6 @@ export default function Sidebar() {
       name: "Settings",
       href: "/dashboard/settings",
       icon: Settings,
-    },
-    {
-      name: "Notifications",
-      href: "/dashboard/notifications",
-      icon: Bell,
-    },
-    {
-      name: "Search",
-      href: "/dashboard/search",
-      icon: Search,
-    },
-    {
-      name: "Preferences",
-      href: "/dashboard/preferences",
-      icon: SlidersHorizontal,
     },
   ];
 

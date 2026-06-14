@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import GuestGuard from "@/components/guards/GuestGuard";
-// Uncomment after backend is ready
-// import { loginUser } from "@/services/authService";
+import { login } from "@/services/authService";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,6 +21,12 @@ export default function LoginPage() {
   const [error, setError] =
     useState("");
 
+  /*
+  =========================================================
+  Handle Input Changes
+  =========================================================
+  */
+
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
@@ -29,53 +34,106 @@ export default function LoginPage() {
         e.target.value,
     }));
 
+    // Clear previous errors
     setError("");
   };
 
-  const handleSubmit = async (e) => {
+  /*
+  =========================================================
+  Handle Login
+  =========================================================
+  */
+
+  const handleSubmit = async (
+    e
+  ) => {
     e.preventDefault();
 
+    // Basic frontend validation
     if (
-      !form.email ||
-      !form.password
+      !form.email.trim() ||
+      !form.password.trim()
     ) {
       setError(
-        "Please fill in all fields."
+        "Please enter email and password."
       );
       return;
     }
 
     try {
       setLoading(true);
+      setError("");
 
       /*
-      -------------------------------------------------------
-      Replace this section when backend is ready
-      -------------------------------------------------------
+      --------------------------------------------------
+      Call Backend Login API
+      --------------------------------------------------
+      authService.js:
+      POST /api/auth/login
+      --------------------------------------------------
+      */
 
-      const response = await loginUser(form);
+      const response =
+        await login({
+          email: form.email,
+          password:
+            form.password,
+        });
+
+      /*
+      --------------------------------------------------
+      Save Authentication Token
+      --------------------------------------------------
+
+      Current:
+      - Save JWT to localStorage.
+
+      TODO (Later):
+      - Store JWT in secure HttpOnly cookies.
+      - Add refresh token flow.
+      - Add session expiration.
+      --------------------------------------------------
+      */
 
       localStorage.setItem(
         "accessToken",
         response.token
       );
 
+      /*
+      --------------------------------------------------
+      Save User Info (Optional)
+      --------------------------------------------------
       */
 
-      // Temporary login for frontend testing
-      localStorage.setItem(
-        "accessToken",
-        "dummy-token"
-      );
+      if (response.user) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify(
+            response.user
+          )
+        );
+      }
+
+      /*
+      --------------------------------------------------
+      Redirect to Dashboard
+      --------------------------------------------------
+      */
 
       router.push(
         "/dashboard"
       );
     } catch (err) {
-      console.error(err);
+      console.error(
+        "Login Error:",
+        err
+      );
 
       setError(
-        "Invalid email or password."
+        err?.response?.data
+          ?.message ||
+          "Invalid email or password."
       );
     } finally {
       setLoading(false);
@@ -85,16 +143,22 @@ export default function LoginPage() {
   return (
     <GuestGuard>
       <main className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-10">
-        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-xl">
+        <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl">
+
+          {/* Header */}
+
           <div className="text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-white">
               Welcome Back 👋
             </h1>
 
             <p className="mt-3 text-slate-400">
-              Login to continue to your AI PDF Workspace.
+              Login to continue to your
+              AI PDF Workspace.
             </p>
           </div>
+
+          {/* Login Form */}
 
           <form
             onSubmit={
@@ -102,6 +166,8 @@ export default function LoginPage() {
             }
             className="mt-8 space-y-5"
           >
+            {/* Email */}
+
             <div>
               <label className="block text-sm text-slate-300 mb-2">
                 Email
@@ -110,6 +176,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 name="email"
+                autoComplete="email"
                 placeholder="Enter your email"
                 value={
                   form.email
@@ -127,11 +194,13 @@ export default function LoginPage() {
                   py-3
                   text-white
                   placeholder:text-slate-500
-                  focus:border-blue-500
                   focus:outline-none
+                  focus:border-blue-500
                 "
               />
             </div>
+
+            {/* Password */}
 
             <div>
               <label className="block text-sm text-slate-300 mb-2">
@@ -141,6 +210,7 @@ export default function LoginPage() {
               <input
                 type="password"
                 name="password"
+                autoComplete="current-password"
                 placeholder="Enter your password"
                 value={
                   form.password
@@ -158,17 +228,32 @@ export default function LoginPage() {
                   py-3
                   text-white
                   placeholder:text-slate-500
-                  focus:border-blue-500
                   focus:outline-none
+                  focus:border-blue-500
                 "
               />
             </div>
 
+            {/* Error Message */}
+
             {error && (
-              <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400">
+              <div
+                className="
+                  rounded-xl
+                  border
+                  border-red-500/20
+                  bg-red-500/10
+                  px-4
+                  py-3
+                  text-sm
+                  text-red-400
+                "
+              >
                 {error}
               </div>
             )}
+
+            {/* Login Button */}
 
             <button
               type="submit"
@@ -184,8 +269,8 @@ export default function LoginPage() {
                 text-white
                 transition-all
                 hover:bg-blue-700
-                disabled:cursor-not-allowed
                 disabled:opacity-60
+                disabled:cursor-not-allowed
               "
             >
               {loading
@@ -194,11 +279,17 @@ export default function LoginPage() {
             </button>
           </form>
 
+          {/* Footer */}
+
           <div className="mt-6 text-center text-sm text-slate-400">
             Don't have an account?{" "}
             <Link
               href="/signup"
-              className="font-medium text-blue-400 hover:text-blue-300"
+              className="
+                font-medium
+                text-blue-400
+                hover:text-blue-300
+              "
             >
               Sign Up
             </Link>

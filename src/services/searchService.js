@@ -1,6 +1,6 @@
-import apiClient from "@/services/apiClient";
+import apiClient from "./apiClient";
 
-export const searchWorkspace =
+export const searchDocuments =
   async (query) => {
     const response =
       await apiClient.get(
