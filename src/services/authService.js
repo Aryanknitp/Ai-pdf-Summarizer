@@ -125,6 +125,8 @@ export const login = async (
   return response.data;
 };
 
+export const loginUser = login;
+
 /*
 ---------------------------------------------------------
 Signup User
@@ -143,6 +145,8 @@ export const signup = async (
 
   return response.data;
 };
+
+export const signupUser = signup;
 
 /*
 ---------------------------------------------------------
@@ -233,6 +237,8 @@ export const logout = async () => {
     );
   }
 };
+
+export const logoutUser = logout;
 
 /*
 ---------------------------------------------------------

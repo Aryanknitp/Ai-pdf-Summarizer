@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("url")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -24,7 +24,7 @@ model Document {
   fileUrl     String
   fileSize    Int
   mimeType    String
-  uploadedBy  String
+  uploadedBy  String 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -42,12 +42,6 @@ model Chat {
   question    String
   answer      String
   createdAt   DateTime @default(now())
-}
-model Preference {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @unique
-  theme       String   @default("dark")
-  notifications Boolean @default(true)
 }
 model Activity {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId

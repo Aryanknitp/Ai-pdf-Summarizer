@@ -1,31 +1,30 @@
 "use client";
 
-import {
-  useEffect,
-} from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-import {
-  useRouter,
-} from "next/navigation";
-
-export default function AuthGuard({
-  children,
-}) {
-  const router =
-    useRouter();
+export default function AuthGuard({ children }) {
+  const router = useRouter();
+  const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    const token =
-      localStorage.getItem(
-        "accessToken"
-      );
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const token = localStorage.getItem("accessToken");
 
     if (!token) {
-      router.replace(
-        "/unauthorized"
-      );
+      router.replace("/login");
+      return;
     }
+
+    setAllowed(true);
   }, [router]);
+
+  if (!allowed) {
+    return null;
+  }
 
   return children;
 }

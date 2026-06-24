@@ -95,24 +95,20 @@ export default function LoginPage() {
       --------------------------------------------------
       */
 
-      localStorage.setItem(
-        "accessToken",
-        response.token
-      );
-
-      /*
-      --------------------------------------------------
-      Save User Info (Optional)
-      --------------------------------------------------
-      */
-
-      if (response.user) {
+      if (typeof window !== "undefined") {
         localStorage.setItem(
-          "user",
-          JSON.stringify(
-            response.user
-          )
+          "accessToken",
+          response.token
         );
+
+        if (response.user) {
+          localStorage.setItem(
+            "user",
+            JSON.stringify(
+              response.user
+            )
+          );
+        }
       }
 
       /*
@@ -133,6 +129,7 @@ export default function LoginPage() {
       setError(
         err?.response?.data
           ?.message ||
+          err?.message ||
           "Invalid email or password."
       );
     } finally {

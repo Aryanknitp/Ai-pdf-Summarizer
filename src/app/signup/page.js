@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signup } from "@/services/authService";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -12,6 +13,8 @@ export default function SignupPage() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -19,17 +22,38 @@ export default function SignupPage() {
       [e.target.name]:
         e.target.value,
     }));
+    setError("");
   };
 
-  const handleSubmit = async (
-    e
-  ) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Call authService.signup()
-    router.push(
-      "/login"
-    );
+    if (!form.name.trim() || !form.email.trim() || !form.password.trim()) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      const response = await signup(form);
+
+      if (typeof window !== "undefined") {
+        if (response?.token) {
+          localStorage.setItem("accessToken", response.token);
+        }
+
+        if (response?.user) {
+          localStorage.setItem("user", JSON.stringify(response.user));
+        }
+      }
+
+      router.replace("/dashboard");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Signup failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,6 +67,12 @@ export default function SignupPage() {
         <p className="text-center text-slate-400 mt-3">
           Start your AI learning journey.
         </p>
+
+        {error ? (
+          <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300">
+            {error}
+          </div>
+        ) : null}
 
         <form
           onSubmit={handleSubmit}
@@ -76,9 +106,10 @@ export default function SignupPage() {
           />
 
           <button
-            className="w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold"
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:opacity-60 py-3 rounded-xl font-semibold"
           >
-            Create Account
+            {loading ? "Creating account..." : "Create Account"}
           </button>
         </form>
 

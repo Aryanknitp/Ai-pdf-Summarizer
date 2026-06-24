@@ -1,27 +1,22 @@
 import { NextResponse } from "next/server";
 import { getDashboardStats } from "@/server/dashboard/dashboardService";
+import { getCurrentUser } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request) {
   try {
-    const stats =
-      await getDashboardStats(
-        "demo-user-id"
-      );
+    const user = getCurrentUser(request);
 
-    return NextResponse.json({
-      success: true,
-      data: stats,
-    });
+    if (!user?.id) {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const stats = await getDashboardStats(user.id);
+
+    return NextResponse.json({ success: true, data: stats });
   } catch (error) {
     return NextResponse.json(
-      {
-        success: false,
-        message:
-          error.message,
-      },
-      {
-        status: 500,
-      }
+      { success: false, message: error.message || "Dashboard failed" },
+      { status: 500 }
     );
   }
 }

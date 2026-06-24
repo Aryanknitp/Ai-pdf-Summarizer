@@ -1,25 +1,13 @@
 import { NextResponse } from "next/server";
-import {
-  callPythonAPI,
-} from "@/lib/pythonClient";
 
-export async function POST(
-  request
-) {
-  const body =
-    await request.json();
-
-  // Future:
-  // const result =
-  //   await callPythonAPI(
-  //     "/summary",
-  //     body
-  //   );
+export async function POST(request) {
+  const body = await request.json();
+  const documentId = body?.documentId || "demo-document";
 
   return NextResponse.json({
     success: true,
-    message:
-      "AI Summary endpoint ready",
+    message: "AI summary generated locally",
     payload: body,
+    summary: `This is a local prototype summary for ${documentId}. It demonstrates the AI summary flow without requiring the external Python service.`,
   });
 }
